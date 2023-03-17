@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Message(models.Model):
     chat_id = models.CharField(
         max_length=10,
@@ -19,6 +20,10 @@ class Message(models.Model):
     )
     content = models.TextField(
         verbose_name='Текст сообщения'
+    )
+    content_tokens = models.PositiveIntegerField(
+        verbose_name='Количество токенов в сообщении',
+        default=1
     )
 
     class Meta:
