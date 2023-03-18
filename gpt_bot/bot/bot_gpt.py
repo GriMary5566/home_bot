@@ -27,7 +27,7 @@ async def echo(update, context):
     content = update.effective_message.text
     content_tokens = num_tokens_from_string(content, 'gpt-3.5-turbo')
 
-    await update.message.reply_text(f'Тестируем бота. Должно быть {content_tokens}')
+    await update.message.reply_text(f'Тестируем бота. Количество токенов в строке: {content_tokens}')
 
 application = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
 echo_handler = MessageHandler(filters.TEXT, echo)
