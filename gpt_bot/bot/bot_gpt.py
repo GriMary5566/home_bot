@@ -13,6 +13,7 @@ def num_tokens_from_string(string: str, encoding_model: str) -> int:
 
 @sync_to_async
 def qustion_save(chat, role, content, content_tokens):
+    """Сохраняет сообщение в базу данных и возвращает его."""
     question = BotMessage.objects.create(
         chat_id=chat.id,
         chat_name=chat.full_name,
@@ -24,6 +25,7 @@ def qustion_save(chat, role, content, content_tokens):
 
 @sync_to_async
 def get_queryset(chat):
+    """Возвращает все сообщения чата."""
     queryset = BotMessage.objects.filter(chat_id=chat.id).values('role', 'content', 'content_tokens')
     print(queryset)
     return queryset
@@ -37,4 +39,3 @@ async def echo(update, context):
     question = await qustion_save(chat, role, content, content_tokens )
     queryset = await get_queryset(chat)
     await update.message.reply_text(f'Тестируем бота. Количество токенов в строке: {content_tokens}')
-
