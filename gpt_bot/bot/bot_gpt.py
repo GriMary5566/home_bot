@@ -1,18 +1,9 @@
-import logging
-import os
 import tiktoken
 
-from telegram.ext import ApplicationBuilder, filters, MessageHandler
-from dotenv import load_dotenv
+from asgiref.sync import sync_to_async
 
-load_dotenv()
+from bot.models import BotMessage
 
-TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
-
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
-logger = logging.getLogger(__name__)
 
 def num_tokens_from_string(string: str, encoding_model: str) -> int:
     """Возвращает количество токенов в строке."""
@@ -20,16 +11,30 @@ def num_tokens_from_string(string: str, encoding_model: str) -> int:
     num_tokens = len(encoding.encode(string))
     return num_tokens
 
+@sync_to_async
+def qustion_save(chat, role, content, content_tokens):
+    question = BotMessage.objects.create(
+        chat_id=chat.id,
+        chat_name=chat.full_name,
+        role=role,
+        content=content,
+        content_tokens=content_tokens
+    )
+    return question
+
+@sync_to_async
+def get_queryset(chat):
+    queryset = BotMessage.objects.filter(chat_id=chat.id).values('role', 'content', 'content_tokens')
+    print(queryset)
+    return queryset
+
 async def echo(update, context):
     """Отправляет ответ на текстовое входящее сообщение."""
     chat = update.effective_chat
     role = 'user'
     content = update.effective_message.text
     content_tokens = num_tokens_from_string(content, 'gpt-3.5-turbo')
-
+    question = await qustion_save(chat, role, content, content_tokens )
+    queryset = await get_queryset(chat)
     await update.message.reply_text(f'Тестируем бота. Количество токенов в строке: {content_tokens}')
 
-application = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
-echo_handler = MessageHandler(filters.TEXT, echo)
-application.add_handler(echo_handler)
-application.run_polling()
