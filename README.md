@@ -70,7 +70,7 @@ cd ../../../gpt_bot/
 ```
 
 ```
-python manage.py startbot
+python3 manage.py startbot
 ```
 
 В Telegram в своём аккаунте зайти в чат своего бота и отправить произвольный текст.  
