@@ -30,6 +30,6 @@ class BotMessage(models.Model):
         verbose_name = 'Сообщение'
         verbose_name_plural = 'Сообщения'
         ordering = ['-created_date', '-id']
-    
+
     def __str__(self):
         return f'Сообщение {self.chat_name}.'
