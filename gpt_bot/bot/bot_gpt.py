@@ -80,12 +80,14 @@ def get_pre_messages(
     )
     sum_tokens: int = system_message_tokens
     print(f'количество токенов в system: {sum_tokens}')
-    print(queryset)
     if len(queryset) == 0:
         sum_tokens += question.content_tokens
         pre_messages.append(last_message)
         return pre_messages, sum_tokens
 
+    if BotMessage.objects.filter(chat_id=question.chat_id).count() > 4:
+        queryset = queryset[:4]
+    print(queryset)
     for query in queryset:
         query_tokens: int = query['content_tokens']
         if sum_tokens + query_tokens >= MAX_NUM_TOKENS:
@@ -109,7 +111,8 @@ def get_gpt_message(pre_messages) -> openai.ChatCompletion:
     openai.api_key = os.getenv("OPENAI_API_KEY")
     completion = openai.ChatCompletion.create(
         model=ENCODING_MODEL,
-        messages=pre_messages
+        messages=pre_messages,
+        max_tokens=1000
     )
     return completion
 
