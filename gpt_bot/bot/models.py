@@ -1,14 +1,25 @@
+from django.contrib.auth import get_user_model
 from django.db import models
+
+User = get_user_model()
 
 
 class BotMessage(models.Model):
+    user = models.ForeignKey(
+        User,
+        verbose_name='Пользователь',
+        on_delete=models.CASCADE,
+        related_name='messages'
+    )
     chat_id = models.CharField(
         max_length=10,
-        verbose_name='id чата'
+        verbose_name='id чата',
+        blank=True
     )
     chat_name = models.CharField(
         max_length=200,
-        verbose_name='Имя чата'
+        verbose_name='Имя чата',
+        blank=True
     )
     created_date = models.DateTimeField(
         verbose_name='Дата создания',
@@ -32,4 +43,6 @@ class BotMessage(models.Model):
         ordering = ['-created_date', '-id']
 
     def __str__(self):
-        return f'Сообщение {self.chat_name}.'
+        if self.user.username == 'Bot':
+            return f'Сообщение от {self.chat_name}.'
+        return f'Сообщение от {self.user.username}.'

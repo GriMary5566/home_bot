@@ -9,4 +9,4 @@ class ChatUser(AbstractUser):
         ordering = ['id']
 
     def __str__(self):
-        return f'Пользователь {self.username}'
+        return self.username
