@@ -14,7 +14,7 @@ from bot.models import BotMessage
 User = get_user_model()
 
 
-BOT_USER = get_object_or_404(User, username='Bot')
+USER_BOT = get_object_or_404(User, username='Bot')
 SYSTEM_MESSAGE: Dict[str, str] = {
     'role': 'system',
     'content': 'You are a helpful assistant.'
@@ -49,15 +49,15 @@ def message_save(
     content_tokens: int
 ) -> BotMessage:
     """Сохраняет сообщение в базу данных и возвращает его."""
-    question = BotMessage.objects.create(
-        user=BOT_USER,
+    message = BotMessage.objects.create(
+        user=USER_BOT,
         chat_id=chat.id,
         chat_name=chat.full_name,
         role=role,
         content=content,
         content_tokens=content_tokens
     )
-    return question
+    return message
 
 
 @sync_to_async

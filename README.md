@@ -2,7 +2,10 @@
 
 ### Как запустить проект:
 
-Клонировать репозиторий и войти в него.
+Для запуска бота необходимо его уже иметь в Telegram :+1:  
+(как создать бота читай например [здесь](https://vc.ru/dev/530248-kak-sdelat-bota-v-telegram-poshagovaya-instrukciya)).  
+
+Клонировать репозиторий и войти в него.  
 
 
 Cоздать и активировать виртуальное окружение:
@@ -25,11 +28,23 @@ python3 -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-Войти в папку проекта и выполнить миграции:
+Войти в папку проекта, в корневой директории создать файл .env  
+и в нем  
+* в переменную TELEGRAM_TOKEN записать токен вашего бота.
+* в переменную SECRET_KEY записать секретный ключ вашего Django-проекта(строка из 66 случайно сгенерированных символов)
+* в переменную OPENAI_API_KEY записать APY key, сгенерированный в вашей учетной записи OpenAI
 
 ```
 cd gpt_bot
 ```
+
+```
+TELEGRAM_TOKEN = <ваш токен>
+SECRET_KEY = <ключ вашего Django-проекта>
+OPENAI_API_KEY = <ваш API key>
+```
+
+Выполнить миграции:
 
 ```
 python3 manage.py migrate
@@ -49,25 +64,7 @@ python3 manage.py runserver
 
 Адрес зоны администратора - [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)   
 
-
-Для запуска бота необходимо его уже иметь в Telegram :+1:  
-(как создать бота читай например [здесь](https://vc.ru/dev/530248-kak-sdelat-bota-v-telegram-poshagovaya-instrukciya)).  
-
-
-В директории gpt_bot/ создать файл .env  
-и в нем  
-* в переменную TELEGRAM_TOKEN записать токен вашего бота.
-* в переменную SECRET_KEY записать секретный ключ вашего Django-проекта(из settings.py)
-* в переменную OPENAI_API_KEY записать APY key, сгенерированный в вашей учетной записи OpenAI
-
-```
-TELEGRAM_TOKEN = <ваш токен>
-SECRET_KEY = <ключ вашего Django-проекта>
-OPENAI_API_KEY = <ваш API key>
-```
-
-
-Из директории gpt_bot/ с файлом manage.py запустить бота:
+Для запуска бота:
 
 ```
 python3 manage.py startbot
